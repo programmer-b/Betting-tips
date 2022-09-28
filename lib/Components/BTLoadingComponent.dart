@@ -28,7 +28,7 @@ class _BTLoadingComponentState extends State<BTLoadingComponent> {
               : Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(provider.btConnectionErrorMessage),
+                    Text(provider.btConnectionErrorMessage, style: primaryTextStyle(size:17),),
                     10.height,
                     ElevatedButton(
                         onPressed: () => RestartAppWidget.init(context),
