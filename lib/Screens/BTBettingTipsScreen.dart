@@ -29,7 +29,7 @@ class _BTBettingTipsScreenState extends State<BTBettingTipsScreen> {
               physics: const BouncingScrollPhysics(),
               child: Center(
                 child: Text(
-                  provider.dummyText,
+                  '',
                   style: secondaryTextStyle(color: Colors.white),
                 ),
               ),
