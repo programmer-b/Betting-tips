@@ -56,10 +56,6 @@ class BTProvider with ChangeNotifier {
     _btLoading = true;
     notifyListeners();
   }
-
-  String _dummyText = '';
-  String get dummyText => _dummyText;
-
   Future<void> btLoadAndStractureData() async {
     await 200.milliseconds.delay;
     _dataInit();
@@ -69,14 +65,32 @@ class BTProvider with ChangeNotifier {
     var tableData =
         document.getElementsByClassName('width100 first last')[0].children;
 
-    var numberOfTables = 5;
+    var numberOfTables = tableData.length;
 
     int table = 0;
 
     while (table < numberOfTables) {
       var rowData = tableData[table].getElementsByTagName('tr');
       int row = 1;
-      var numberOfRows = 12;
+      var numberOfRows = rowData.length - 3;
+
+      dates.insert(
+          table,
+          tableData[table]
+                  .getElementsByClassName('title')[0]
+                  .getElementsByTagName('a')[0]
+                  .attributes['title'] ??
+              "");
+      time.insert(table, []);
+      flagUrls.insert(table, []);
+      countries.insert(table, []);
+      sports.insert(table, []);
+      competitions.insert(table, []);
+      teams.insert(table, []);
+      tips.insert(table, []);
+      odds.insert(table, []);
+      results.insert(table, []);
+      resultColorCodes.insert(table, []);
 
       while (row < numberOfRows) {
         var columnData = rowData[row].getElementsByTagName('td');
@@ -85,81 +99,70 @@ class BTProvider with ChangeNotifier {
 
         int currentRow = row - 1;
 
-        var date = tableData[table]
-                .getElementsByClassName('title')[0]
-                .getElementsByTagName('a')[0]
-                .attributes['title'] ??
-            "";
-        dummy[table][currentRow]["date"] = date;
-
         while (column < numberOfColumns) {
           switch (column) {
             case 0:
-              dummy[table][currentRow]["time"] =
-                  columnData[0].getElementsByTagName('strong')[0].text;
-
-              log("TIME AT TABLE: ${table + 1} :: ROW $currentRow :: COLUMN ${column + 1} :: SET TO  => ${columnData[0].getElementsByTagName('strong')[0].text}");
-
+              time[table].insert(currentRow,
+                  columnData[0].getElementsByTagName('strong')[0].text);
               break;
             case 1:
-              dummy[table][currentRow]["flag_url"] = columnData[1]
-                      .getElementsByTagName('img')[0]
-                      .attributes['src'] ??
-                  "";
-              log("FLAG URL AT TABLE: ${table + 1} :: ROW $currentRow :: COLUMN ${column + 1} :: SET TO  => ${columnData[1].getElementsByTagName('img')[0].attributes['src']}");
+              flagUrls[table].insert(
+                  currentRow,
+                  columnData[1]
+                          .getElementsByTagName('img')[0]
+                          .attributes['src'] ??
+                      "");
+
               break;
             case 2:
-              dummy[table][currentRow]["country"] =
-                  columnData[2].getElementsByTagName('strong')[0].text;
+              countries[table].insert(currentRow,
+                  columnData[2].getElementsByTagName('strong')[0].text);
 
-              log("COUNTRY AT TABLE: ${table + 1} :: ROW $currentRow :: COLUMN ${column + 1} :: SET TO  => ${columnData[2].getElementsByTagName('strong')[0].text}");
               break;
             case 3:
-              dummy[table][currentRow]["sport"] = columnData[3]
-                      .getElementsByTagName('img')[0]
-                      .attributes['alt'] ??
-                  "";
+              sports[table].insert(
+                  currentRow,
+                  columnData[3]
+                          .getElementsByTagName('img')[0]
+                          .attributes['alt'] ??
+                      "");
 
-              log("SPORT AT TABLE: ${table + 1} :: ROW $currentRow :: COLUMN ${column + 1} :: SET TO  => ${columnData[3].getElementsByTagName('img')[0].attributes['alt']}");
               break;
             case 4:
-              dummy[table][currentRow]["competitions"] =
-                  columnData[4].getElementsByTagName('strong')[0].text;
+              competitions[table].insert(currentRow,
+                  columnData[4].getElementsByTagName('strong')[0].text);
 
-              log("COMPETITIONS AT TABLE: ${table + 1} :: ROW $currentRow :: COLUMN ${column + 1} :: SET TO  => ${columnData[4].getElementsByTagName('strong')[0].text}");
               break;
             case 5:
-              dummy[table][currentRow]["teams"] =
-                  columnData[5].getElementsByTagName('strong')[0].text;
-              log("TEAMS AT TABLE: ${table + 1} :: ROW $currentRow :: COLUMN ${column + 1} :: SET TO  => ${columnData[5].getElementsByTagName('strong')[0].text}");
+              teams[table].insert(currentRow,
+                  columnData[5].getElementsByTagName('strong')[0].text);
               break;
             case 6:
-              dummy[table][currentRow]["tip"] =
-                  columnData[6].getElementsByTagName('strong')[0].text;
-              log("TIP AT TABLE: ${table + 1} :: ROW $currentRow :: COLUMN ${column + 1} :: SET TO  => ${columnData[6].getElementsByTagName('strong')[0].text}");
+              tips[table].insert(currentRow,
+                  columnData[6].getElementsByTagName('strong')[0].text);
               break;
             case 7:
-              dummy[table][currentRow]["odds"] =
-                  columnData[7].getElementsByTagName('strong')[0].text;
-              log("ODDS AT TABLE: ${table + 1} :: ROW $currentRow :: COLUMN ${column + 1} :: SET TO  => ${columnData[7].getElementsByTagName('strong')[0].text}");
+              odds[table].insert(currentRow,
+                  columnData[7].getElementsByTagName('strong')[0].text);
               break;
             case 8:
-              dummy[table][currentRow]["results"] =
-                  columnData[8].getElementsByTagName('strong')[0].text;
-              log("RESULTS AT TABLE: ${table + 1} :: ROW $currentRow :: COLUMN ${column + 1} :: SET TO  => ${columnData[8].getElementsByTagName('strong')[0].text}");
+              resultColorCodes[table].insert(
+                  currentRow,
+                  columnData[8]
+                          .getElementsByTagName('span')[0]
+                          .attributes['style']
+                          ?.replaceAll("color: #", "0x00") ??
+                      "0x00000000");
+              results[table].insert(currentRow,
+                  columnData[8].getElementsByTagName('strong')[0].text);
               break;
           }
-
           column++;
         }
-
         row++;
       }
-
       table++;
     }
-    log('$dummy');
-
     notifyListeners();
   }
 
