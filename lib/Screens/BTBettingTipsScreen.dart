@@ -1,4 +1,6 @@
+import 'package:bettingtips/Commons/BTColors.dart';
 import 'package:bettingtips/Components/BTBackgroundComponent.dart';
+import 'package:bettingtips/Components/BTBettingTipsTableComponent.dart';
 import 'package:bettingtips/Components/BTDrawerComponent.dart';
 import 'package:bettingtips/Components/BTLoadingComponent.dart';
 import 'package:bettingtips/Components/BTTopMenuLayout.dart';
@@ -30,7 +32,10 @@ class _BTBettingTipsScreenState extends State<BTBettingTipsScreen> {
                 physics: const BouncingScrollPhysics(),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children: const [BTTopMenuLayout()],
+                  children: const [
+                    BTTopMenuLayout(),
+                    BTBettingTipsTableComponent()
+                  ],
                 )),
           )),
           drawer: const BTDrawerComponent(),
