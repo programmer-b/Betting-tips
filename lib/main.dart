@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
         ),
         home: RestartAppWidget(
           child: Builder(builder: (context) {
-            context.read<BTProvider>().btLoadAndStractureData();
+            context.read<BTProvider>().btLoadAndStructureData();
             return const BTBettingTipsScreen();
           }),
         ),

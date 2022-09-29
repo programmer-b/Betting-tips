@@ -7,6 +7,7 @@ import 'dart:io';
 import 'package:bettingtips/Commons/BTMenu.dart';
 import 'package:bettingtips/Commons/BTStrings.dart';
 import 'package:bettingtips/Model/BTAllTipsModel.dart';
+import 'package:bettingtips/Screens/BTBettingTipsScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
@@ -26,20 +27,23 @@ class BTProvider with ChangeNotifier {
     _currentIndex = 0;
   }
 
-  Future<void> updateScreen(context, {required final int index}) async {
+  Future<void> updateScreen(context,
+      {required final int index,
+      PageRouteAnimation? pageRouteAnimation =
+          PageRouteAnimation.Slide}) async {
     var menus = List.from(menu)..addAll(info);
     log('NEW MENU LENGTH: ${menus.length}');
 
     _currentIndex = index;
-    _currentScreenTitle = menus[index]['name'];
+    _currentScreenTitle = menus[index]['name'] ?? "BETTING TIPS";
     notifyListeners();
 
     await 50.milliseconds.delay;
 
-    Widget? newScreen = menus[index]['route'];
+    Widget? newScreen = menus[index]['route'] ?? const BTBettingTipsScreen();
     log('NAVIGATING TO THIS INDEX: $index');
     newScreen.launch(context,
-        isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+        isNewTask: true, pageRouteAnimation: pageRouteAnimation);
   }
 
   bool _btLoadSuccess = false;
@@ -56,7 +60,8 @@ class BTProvider with ChangeNotifier {
     _btLoading = true;
     notifyListeners();
   }
-  Future<void> btLoadAndStractureData() async {
+
+  Future<void> btLoadAndStructureData() async {
     await 200.milliseconds.delay;
     _dataInit();
     final webData = await btGetDataFromNetwork(uri: Uri.parse(btBaseUrl));

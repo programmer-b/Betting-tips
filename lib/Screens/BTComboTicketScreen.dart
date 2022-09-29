@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../Components/BTBackgroundComponent.dart';
 import '../Components/BTDrawerComponent.dart';
+import '../Components/BTTopMenuLayout.dart';
 import '../Provider/BTProvider.dart';
 
 class BTComboTicketScreen extends StatefulWidget {
@@ -22,9 +23,14 @@ class _BTComboTicketScreenState extends State<BTComboTicketScreen> {
           appBar: AppBar(
             title: Text(provider.currentScreenTitle),
           ),
-          body: const BTLoadingComponent(
+          body: BTLoadingComponent(
               child: BTBackgroundComponent(
-            child: Center(),
+            child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: const [BTTopMenuLayout()],
+                )),
           )),
           drawer: const BTDrawerComponent(),
         );

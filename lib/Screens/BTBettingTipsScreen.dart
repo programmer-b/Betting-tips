@@ -1,6 +1,7 @@
 import 'package:bettingtips/Components/BTBackgroundComponent.dart';
 import 'package:bettingtips/Components/BTDrawerComponent.dart';
 import 'package:bettingtips/Components/BTLoadingComponent.dart';
+import 'package:bettingtips/Components/BTTopMenuLayout.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
@@ -26,14 +27,11 @@ class _BTBettingTipsScreenState extends State<BTBettingTipsScreen> {
           body: BTLoadingComponent(
               child: BTBackgroundComponent(
             child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: Center(
-                child: Text(
-                  '',
-                  style: secondaryTextStyle(color: Colors.white),
-                ),
-              ),
-            ),
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: const [BTTopMenuLayout()],
+                )),
           )),
           drawer: const BTDrawerComponent(),
         );

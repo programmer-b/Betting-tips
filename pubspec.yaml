@@ -41,6 +41,7 @@ dependencies:
   html: ^0.15.0
   http: ^0.13.5
   loading_animation_widget: ^1.2.0+3
+  marquee: ^2.2.3
 
 dev_dependencies:
   flutter_test:

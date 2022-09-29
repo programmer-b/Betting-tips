@@ -1,4 +1,5 @@
 import 'package:bettingtips/Components/BTLoadingComponent.dart';
+import 'package:bettingtips/Components/BTTopMenuLayout.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,9 +23,14 @@ class _BTOverNightTipsScreenState extends State<BTOverNightTipsScreen> {
           appBar: AppBar(
             title: Text(provider.currentScreenTitle),
           ),
-          body: const BTLoadingComponent(
+          body: BTLoadingComponent(
               child: BTBackgroundComponent(
-            child: Center(),
+                child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: const [BTTopMenuLayout()],
+                    )),
           )),
           drawer: const BTDrawerComponent(),
         );
