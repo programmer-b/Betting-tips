@@ -18,6 +18,8 @@ class _BTLoadingComponentState extends State<BTLoadingComponent> {
   Widget build(BuildContext context) {
     final provider = Provider.of<BTProvider>(context);
     return Container(
+      height: double.infinity,
+      width: double.infinity,
       color: Colors.white,
       child: provider.btLoading
           ? LoadingAnimationWidget.discreteCircle(

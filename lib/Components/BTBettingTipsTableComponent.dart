@@ -1,6 +1,8 @@
 import 'package:bettingtips/Commons/BTColors.dart';
 import 'package:bettingtips/Commons/BTStrings.dart';
 import 'package:bettingtips/Components/BTMovingTextComponent.dart';
+import 'package:bettingtips/Model/BTAllTipsModel.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
@@ -14,56 +16,129 @@ class BTBettingTipsTableComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     BoxDecoration headerDecoration = const BoxDecoration(
         color: btBackgroundBlueColor,
-        border: Border(bottom: BorderSide(color: Colors.grey), top: BorderSide(color: Colors.grey)));
+        border: Border(
+            bottom: BorderSide(color: Colors.grey),
+            top: BorderSide(color: Colors.grey)));
     BoxDecoration bodyDecoration = const BoxDecoration(
         color: btBackgroundTransparentColor,
         border: Border(bottom: BorderSide(color: Colors.grey)));
     return Consumer<BTProvider>(
       builder: (context, provider, child) {
         double width = MediaQuery.of(context).size.width;
-        Widget tipsTable() => Column(
+        Widget tipsTable(index) => Column(
               children: [
-                Container(
-                  height: 25,
-                  decoration: headerDecoration,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                Text(
+                  dates[index] ?? "",
+                  style: boldTextStyle(color: btHeaderDateColor),
+                ).paddingSymmetric(vertical: 5),
+                for (int i = 0; i < 3; i++)
+                  Column(
                     children: [
-                      const Icon(Icons.circle, size: 14, color: Colors.red,),
-                      Text(' Bulgarian Pr.League - 17:15 GMT - ', style: boldTextStyle(color: btPrimaryTextColor, size: 12),),
-                      for(int i=0;i<5;i++) const Icon(Icons.star,color: Colors.orange, size: 14,)
+                      Container(
+                          height: 25,
+                          decoration: headerDecoration,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              CircleAvatar(
+                                radius: 10,
+                                backgroundColor: "#ff8000".toColor(),
+                                child: ClipOval(
+                                  child:
+                                      Image.network(flagUrls[index][i] ?? ""),
+                                ),
+                              ).paddingSymmetric(horizontal: 4),
+                              Text(
+                                ' ${countries[index][i]?.replaceAll('\n', '') ?? "null"} - ${time[index][i] ?? "null"} GMT - ',
+                                style: boldTextStyle(
+                                    color: btPrimaryTextColor, size: 14),
+                              ),
+                              for (int i = 0; i < 3; i++)
+                                const Icon(
+                                  Icons.star,
+                                  color: Colors.orange,
+                                  size: 14,
+                                )
+                            ],
+                          )),
+                      Container(
+                          height: 25,
+                          decoration: bodyDecoration,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                teams[index][i] ?? "null",
+                                style: secondaryTextStyle(
+                                    color: btPrimaryTextColor, size: 14),
+                              ).withWidth(width * 0.50).paddingOnly(top: 5),
+                              const VerticalDivider(
+                                color: Colors.grey,
+                                width: 2,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(tips[index][i]?.toUpperCase() ?? "null",
+                                          style: secondaryTextStyle(
+                                              color: btPrimaryTextColor,
+                                              size: 14))
+                                      .paddingTop(5),
+                                  const VerticalDivider(
+                                    color: Colors.grey,
+                                    width: 2,
+                                  ),
+                                  Text(odds[index][i] ?? "null",
+                                      style: secondaryTextStyle(
+                                          color: btPrimaryTextColor, size: 14)),
+                                ],
+                              ).withWidth(width * 0.4)
+                            ],
+                          ).paddingSymmetric(horizontal: 5)),
+                      Container(
+                          height: 25,
+                          decoration: bodyDecoration,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Final results',
+                                style: secondaryTextStyle(
+                                    color: btPrimaryTextColor, size: 14),
+                              ).withWidth(width * 0.5).paddingLeft(5),
+                              const VerticalDivider(
+                                color: Colors.grey,
+                                width: 2,
+                              ),
+                              Container(
+                                padding: EdgeInsets.zero,
+                                color: results[index][i] == '?'
+                                    ? Colors.transparent
+                                    : resultColorCodes[index][i]?.toColor() ??
+                                        Colors.transparent,
+                                height: 25,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                        results[index][i]
+                                                ?.replaceAll('?', '') ??
+                                            "null",
+                                        style: secondaryTextStyle(
+                                            color: btPrimaryTextColor,
+                                            size: 14)),
+                                  ],
+                                ),
+                              ).withWidth(width * 0.4),
+                            ],
+                          )),
                     ],
-                  )
-                ),
-                Container(
-                    height: 25,
-                    decoration: bodyDecoration,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text('Arda FK - Hebar Pazardzhik', style: secondaryTextStyle(color: btPrimaryTextColor),).withWidth(width * 0.55),
-                        const VerticalDivider(color: Colors.grey,),
-                        Text('home win', style: secondaryTextStyle(color: btPrimaryTextColor)).withWidth(((width-40) -(width*0.6))/2),
-                        const VerticalDivider(color: Colors.grey,),
-                        Text('1.33', style: secondaryTextStyle(color: btPrimaryTextColor)).withWidth(((width-40) -(width*0.6))/2),
-                      ],
-                    ).paddingSymmetric(horizontal: 5)
-                ),
-                Container(
-                    height: 25,
-                    decoration: bodyDecoration,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text('Final results', style: secondaryTextStyle(color: btPrimaryTextColor),).withWidth(width * 0.55),
-                        const VerticalDivider(color: Colors.grey,),
-                        Text('home win', style: secondaryTextStyle(color: btPrimaryTextColor)).withWidth(((width-34) -(width*0.6))/2),
-                      ],
-                    ).paddingSymmetric(horizontal: 5)
-                ),
+                  ),
               ],
             );
         return Container(
@@ -76,7 +151,7 @@ class BTBettingTipsTableComponent extends StatelessWidget {
                 text: btHeaderMessage,
                 decoration: headerDecoration,
               ),
-              tipsTable()
+              for (int i = 0; i < dates.length; i++) tipsTable(i),
             ],
           ).withWidth(double.infinity),
         );

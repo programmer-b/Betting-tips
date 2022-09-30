@@ -156,8 +156,8 @@ class BTProvider with ChangeNotifier {
                   columnData[8]
                           .getElementsByTagName('span')[0]
                           .attributes['style']
-                          ?.replaceAll("color: #", "0x00") ??
-                      "0x00000000");
+                          ?.replaceAll("color: ", "").replaceAll(';', '') ??
+                      "ff000000");
               results[table].insert(currentRow,
                   columnData[8].getElementsByTagName('strong')[0].text);
               break;

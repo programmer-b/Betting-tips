@@ -1,4 +1,5 @@
 import 'package:bettingtips/Commons/BTColors.dart';
+import 'package:bettingtips/Commons/BTStrings.dart';
 import 'package:bettingtips/Components/BTBackgroundComponent.dart';
 import 'package:bettingtips/Components/BTBettingTipsTableComponent.dart';
 import 'package:bettingtips/Components/BTDrawerComponent.dart';
@@ -32,9 +33,28 @@ class _BTBettingTipsScreenState extends State<BTBettingTipsScreen> {
                 physics: const BouncingScrollPhysics(),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children: const [
-                    BTTopMenuLayout(),
-                    BTBettingTipsTableComponent()
+                  children: [
+                    const BTTopMenuLayout(),
+                    Text(
+                      btTableHeaderMessage,
+                      style: boldTextStyle(color: btTableHeaderTextColor),
+                    ).paddingSymmetric(vertical: 8),
+                    const BTBettingTipsTableComponent(),
+                    Text(
+                      btBottomMessage,
+                      style: primaryTextStyle(color: btTableHeaderTextColor),
+                    ).paddingAll(20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.copyright_outlined, color: btTableHeaderTextColor,),
+                        5.width,
+                        Text(
+                          'Dantech',
+                          style: boldTextStyle(color: btTableHeaderTextColor),
+                        )
+                      ],
+                    ).paddingAll(30).center(),
                   ],
                 )),
           )),
