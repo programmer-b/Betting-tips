@@ -22,6 +22,76 @@ class BTComboTicketTableComponent extends StatelessWidget {
         color: btBackgroundTransparentColor,
         border: Border(bottom: BorderSide(color: Colors.grey)));
     double width = MediaQuery.of(context).size.width;
+    String totalOdds(table, index) {
+      var firstOdds = 0.0, secondOdds = 0.0, totalOdds = "0.0";
+      switch (table) {
+        case 0:
+          firstOdds = odds[index][0].toDouble();
+          secondOdds = odds[index][1].toDouble();
+          break;
+        case 1:
+          firstOdds = odds[index][2].toDouble();
+          secondOdds = odds[index][3].toDouble();
+          break;
+      }
+      totalOdds = (firstOdds + secondOdds).toString();
+      if (totalOdds.length > 4) {
+        totalOdds = totalOdds.substring(0, 4);
+      }
+      return totalOdds;
+    }
+
+    int tableIndex(table, childTable) {
+      switch (table) {
+        case 0:
+          switch (childTable) {
+            default:
+              return childTable;
+          }
+        case 1:
+          switch (childTable) {
+            default:
+              return childTable + 2;
+          }
+        default:
+          return childTable;
+      }
+    }
+
+    Map<String, dynamic> resultsContainerContent(index, table) {
+      var numberOfStars = 0,
+          bgColor = "#ff000000",
+          firstBgColor = "#ff000000",
+          secondBgColor = "#ff000000";
+      switch (table) {
+        case 0:
+          firstBgColor = resultColorCodes[index][0] ?? firstBgColor;
+          secondBgColor = resultColorCodes[index][1] ?? secondBgColor;
+          break;
+        case 1:
+          firstBgColor = resultColorCodes[index][2] ?? firstBgColor;
+          secondBgColor = resultColorCodes[index][3] ?? secondBgColor;
+          break;
+        default:
+          return {"numberOfStars": "2", "bgColor": ""};
+      }
+      if (firstBgColor == secondBgColor) {
+        bgColor = firstBgColor;
+        if (bgColor == '#008000') {
+          numberOfStars = 3;
+        } else {
+          numberOfStars = 1;
+        }
+      } else if (firstBgColor == '#008000' || secondBgColor == '#008000') {
+        bgColor = '#008000';
+        numberOfStars = 2;
+      } else {
+        bgColor = "";
+        numberOfStars = 0;
+      }
+      return {"numberOfStars": numberOfStars, "bgColor": bgColor};
+    }
+
     return Consumer<BTProvider>(
       builder: (context, provider, child) {
         Widget comboTable(index) => Column(
@@ -53,7 +123,7 @@ class BTComboTicketTableComponent extends StatelessWidget {
                                         children: [
                                           Center(
                                               child: Text(
-                                            '${time[index][table + childTable]}',
+                                            '${time[index][tableIndex(table, childTable)]}',
                                             style: primaryTextStyle(
                                                 color: btPrimaryTextColor,
                                                 size: 12),
@@ -63,17 +133,17 @@ class BTComboTicketTableComponent extends StatelessWidget {
                                           ),
                                           Center(
                                               child: Text(
-                                            '${countries[index][table + childTable]?.substring(0, 3).toUpperCase()}',
+                                            '${countries[index][tableIndex(table, childTable)]?.substring(0, 3).toUpperCase()}',
                                             style: primaryTextStyle(
                                                 color: btPrimaryTextColor,
                                                 size: 12),
-                                          )).withWidth(width * 0.11),
+                                          )).withWidth(width * 0.08),
                                           const VerticalDivider(
                                             color: Colors.grey,
                                           ),
                                           Center(
                                               child: Text(
-                                            '${teams[index][table + childTable]}',
+                                            '${teams[index][tableIndex(table, childTable)]}',
                                             style: primaryTextStyle(
                                                 color: btPrimaryTextColor,
                                                 size: 12),
@@ -83,7 +153,7 @@ class BTComboTicketTableComponent extends StatelessWidget {
                                           ),
                                           Center(
                                               child: Text(
-                                            '${tips[index][table + childTable]}',
+                                            '${tips[index][tableIndex(table, childTable)]}',
                                             style: primaryTextStyle(
                                                 color: btPrimaryTextColor,
                                                 size: 12),
@@ -93,7 +163,7 @@ class BTComboTicketTableComponent extends StatelessWidget {
                                           ),
                                           Center(
                                               child: Text(
-                                            '${odds[index][table + childTable]}',
+                                            '${odds[index][tableIndex(table, childTable)]}',
                                             style: primaryTextStyle(
                                                 color: btPrimaryTextColor,
                                                 size: 12),
@@ -102,18 +172,18 @@ class BTComboTicketTableComponent extends StatelessWidget {
                                             color: Colors.grey,
                                           ),
                                           Container(
-                                            
-                                            color: results[index]
-                                                        [table + childTable] ==
+                                            color: results[index][tableIndex(
+                                                        table, childTable)] ==
                                                     '?'
                                                 ? Colors.transparent
-                                                : resultColorCodes[index]
-                                                            [table + childTable]
+                                                : resultColorCodes[index][
+                                                            tableIndex(table,
+                                                                childTable)]
                                                         ?.toColor() ??
                                                     Colors.transparent,
                                             child: Center(
                                                 child: Text(
-                                              '${results[index][table + childTable]?.replaceAll("?", "")}',
+                                              '${results[index][tableIndex(table, childTable)]?.replaceAll("?", "")}',
                                               style: primaryTextStyle(
                                                   color: btPrimaryTextColor,
                                                   size: 12),
@@ -124,7 +194,9 @@ class BTComboTicketTableComponent extends StatelessWidget {
                               ],
                             ),
                             Container(
-                                decoration: bodyDecoration,
+                                decoration: BoxDecoration(
+                                    color: resultsContainerContent(index, table)["bgColor"],
+                                    border: Border.all(color: Colors.grey)),
                                 height: 34,
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -134,7 +206,7 @@ class BTComboTicketTableComponent extends StatelessWidget {
                                       '',
                                       style: primaryTextStyle(
                                           color: btPrimaryTextColor, size: 12),
-                                    )).withWidth(width * 0.616),
+                                    )).withWidth(width * 0.59),
                                     const VerticalDivider(
                                       color: Colors.grey,
                                     ),
@@ -143,7 +215,11 @@ class BTComboTicketTableComponent extends StatelessWidget {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        for (int i = 0; i < 3; i++)
+                                        for (int i = 0;
+                                            i <
+                                                resultsContainerContent(index,
+                                                    table)["numberOfStars"];
+                                            i++)
                                           const Icon(
                                             Icons.star,
                                             size: 10,
@@ -156,7 +232,7 @@ class BTComboTicketTableComponent extends StatelessWidget {
                                     ),
                                     Center(
                                         child: Text(
-                                      '2.76',
+                                      totalOdds(table, index),
                                       style: primaryTextStyle(
                                           color: btPrimaryTextColor, size: 12),
                                     )).withWidth(width * 0.08),
@@ -175,7 +251,7 @@ class BTComboTicketTableComponent extends StatelessWidget {
                         ),
                     ],
                   ),
-                ).paddingSymmetric(vertical: 10),
+                ),
               ],
             );
 
@@ -200,7 +276,7 @@ class BTComboTicketTableComponent extends StatelessWidget {
 
 Widget _comboTableTitle(width, decoration) => Container(
     decoration: decoration,
-    height: 25,
+    height: 34,
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -216,7 +292,7 @@ Widget _comboTableTitle(width, decoration) => Container(
             child: Text(
           'LEAGUE',
           style: primaryTextStyle(color: btPrimaryTextColor, size: 12),
-        )).withWidth(width * 0.11),
+        )).withWidth(width * 0.08),
         const VerticalDivider(
           color: Colors.grey,
         ),
