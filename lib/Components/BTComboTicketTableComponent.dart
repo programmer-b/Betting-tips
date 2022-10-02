@@ -34,7 +34,7 @@ class BTComboTicketTableComponent extends StatelessWidget {
           secondOdds = odds[index][3].toDouble();
           break;
       }
-      totalOdds = (firstOdds + secondOdds).toString();
+      totalOdds = (firstOdds * secondOdds).toString();
       if (totalOdds.length > 4) {
         totalOdds = totalOdds.substring(0, 4);
       }
@@ -60,17 +60,27 @@ class BTComboTicketTableComponent extends StatelessWidget {
 
     Map<String, dynamic> resultsContainerContent(index, table) {
       var numberOfStars = 0,
-          bgColor = "#ff000000",
-          firstBgColor = "#ff000000",
-          secondBgColor = "#ff000000";
+          bgColor = "",
+          firstBgColor = "",
+          secondBgColor = "";
       switch (table) {
         case 0:
-          firstBgColor = resultColorCodes[index][0] ?? firstBgColor;
-          secondBgColor = resultColorCodes[index][1] ?? secondBgColor;
+          firstBgColor = results[index][0] == '?'
+              ? firstBgColor
+              : resultColorCodes[index][0] ?? "";
+
+          secondBgColor = results[index][1] == '?'
+              ? secondBgColor
+              : resultColorCodes[index][1] ?? "";
           break;
         case 1:
-          firstBgColor = resultColorCodes[index][2] ?? firstBgColor;
-          secondBgColor = resultColorCodes[index][3] ?? secondBgColor;
+          firstBgColor = results[index][2] == '?'
+              ? firstBgColor
+              : resultColorCodes[index][2] ?? "";
+
+          secondBgColor = results[index][3] == '?'
+              ? secondBgColor
+              : resultColorCodes[index][3] ?? "";
           break;
         default:
           return {"numberOfStars": "2", "bgColor": ""};
@@ -79,7 +89,10 @@ class BTComboTicketTableComponent extends StatelessWidget {
         bgColor = firstBgColor;
         if (bgColor == '#008000') {
           numberOfStars = 3;
-        } else {
+        } else if(bgColor == ""){
+          numberOfStars = 2;
+        }
+        else {
           numberOfStars = 1;
         }
       } else if (firstBgColor == '#008000' || secondBgColor == '#008000') {
@@ -195,7 +208,10 @@ class BTComboTicketTableComponent extends StatelessWidget {
                             ),
                             Container(
                                 decoration: BoxDecoration(
-                                    color: resultsContainerContent(index, table)["bgColor"],
+                                    color: resultsContainerContent(
+                                            index, table)["bgColor"]
+                                        .toString()
+                                        .toColor(),
                                     border: Border.all(color: Colors.grey)),
                                 height: 34,
                                 child: Row(

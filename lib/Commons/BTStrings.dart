@@ -9,3 +9,17 @@ const String btHeaderMessage =
 const String btTableHeaderMessage = 'Lets hope we can make some wiin!';
 const String btBottomMessage =
     'This application is only an informative tool and must be used just for fun. We post various sports analyze that represent our opinion regarding the eventual outcome of those games';
+List<String> months = [
+  'january',
+  'february',
+  'march',
+  'april',
+  'may',
+  'june',
+  'july',
+  'august',
+  'september',
+  'october',
+  'november',
+  'december'
+];

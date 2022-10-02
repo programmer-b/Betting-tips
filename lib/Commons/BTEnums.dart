@@ -7,7 +7,7 @@ extension  ColorExtension on String {
   toColor(){
     var hexColor = this.replaceAll("#", "");
     if(hexColor.length == 6){
-      hexColor = 'ff$hexColor';
+      hexColor = '99$hexColor';
     }
     if(hexColor.length == 8){
       return Color(int.parse("0x$hexColor"));
