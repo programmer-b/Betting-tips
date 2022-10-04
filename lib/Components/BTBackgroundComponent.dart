@@ -1,3 +1,4 @@
+import 'package:bettingtips/Commons/BTStrings.dart';
 import 'package:flutter/material.dart';
 
 class BTBackgroundComponent extends StatelessWidget {
@@ -11,14 +12,15 @@ class BTBackgroundComponent extends StatelessWidget {
       height: double.infinity,
       width: double.infinity,
       decoration: const BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-            Color(0xff000031),
-            Color(0xff8b0000),
-          ])),
-      child: child,
+          image: DecorationImage(
+              image: AssetImage(btBackgroundImageAsset), fit: BoxFit.cover),
+          color: Colors.black),
+      child: Container(
+        height: double.infinity,
+        width: double.infinity,
+        decoration: const BoxDecoration(color: Colors.black),
+        child: child,
+      ),
     );
   }
 }

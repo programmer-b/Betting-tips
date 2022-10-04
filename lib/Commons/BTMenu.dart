@@ -46,19 +46,4 @@ const List<Map<String, dynamic>> menu = [
     "icon": Icons.rocket_launch_outlined,
     "route": BTOverNightTipsScreen()
   },
-  {
-    "name": "STATISTIQUES",
-    "icon": Icons.feed_outlined,
-    "route": BTStatiquesScreen()
-  },
-  {
-    "name": "FLASH SCORE",
-    "icon": Icons.light_mode_outlined,
-    "route": BTFlashScoreScreen()
-  },
-  {
-    "name": "SUPPORT US",
-    "icon": Icons.analytics_outlined,
-    "route": BTSupportUsScreen()
-  },
 ];

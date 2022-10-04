@@ -14,6 +14,7 @@ import 'package:http/http.dart' as http;
 import 'package:nb_utils/nb_utils.dart' hide log;
 import 'package:html/parser.dart';
 import '../Commons/BTInfo.dart';
+import '../Utils/BTAdhelper.dart';
 
 class BTProvider with ChangeNotifier {
   int _currentIndex = 0;
@@ -31,6 +32,7 @@ class BTProvider with ChangeNotifier {
       {required final int index,
       PageRouteAnimation? pageRouteAnimation =
           PageRouteAnimation.Slide}) async {
+    showInterstitialAd();
     var menus = List.from(menu)..addAll(info);
     log('NEW MENU LENGTH: ${menus.length}');
 
@@ -44,6 +46,7 @@ class BTProvider with ChangeNotifier {
     log('NAVIGATING TO THIS INDEX: $index');
     newScreen.launch(context,
         isNewTask: true, pageRouteAnimation: pageRouteAnimation);
+    createInterstitialAd();
   }
 
   bool _btLoadSuccess = false;
@@ -62,6 +65,7 @@ class BTProvider with ChangeNotifier {
   }
 
   Future<void> btLoadAndStructureData() async {
+    createInterstitialAd();
     await 200.milliseconds.delay;
     _dataInit();
     final webData = await btGetDataFromNetwork(uri: Uri.parse(btBaseUrl));
@@ -157,7 +161,7 @@ class BTProvider with ChangeNotifier {
                           .getElementsByTagName('span')[0]
                           .attributes['style']
                           ?.replaceAll("color: ", "").replaceAll(';', '') ??
-                      "ff000000");
+                      "#000000");
               results[table].insert(currentRow,
                   columnData[8].getElementsByTagName('strong')[0].text);
               break;
@@ -175,7 +179,7 @@ class BTProvider with ChangeNotifier {
     try {
       final data = await http.get(uri).timeout(const Duration(seconds: 300),
           onTimeout: () =>
-              throw TimeoutException('Can\'t connect in 300 seconds.'));
+              throw TimeoutException('Can\'t connect in 45 seconds.'));
       if (data.statusCode == 200) {
         _btLoadSuccess = true;
         _btLoading = false;

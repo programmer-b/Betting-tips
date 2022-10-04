@@ -43,11 +43,45 @@ dependencies:
   loading_animation_widget: ^1.2.0+3
   marquee: ^2.2.3
   cached_network_image: ^3.2.2
+  flutter_launcher_icons: ^0.10.0
+  rename: ^2.0.1
+  google_mobile_ads: ^2.0.1
+  flutter_share: ^2.0.0
+  flutter_native_splash: ^2.2.10+1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/play_store_512.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: "assets/images/play_store_512.png"
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
+  windows:
+    generate: true
+    image_path: "assets/images/play_store_512.png"
+    icon_size: 48 # min:48, max:256, default: 48
+flutter_native_splash:
+  color: "#ffffff"
+  image: assets/images/play_store_512.png
+  
+  color_dark: "#ffffff"
+  image_dark: assets/images/ic_launcher.png
+  
+
+  android_12:
+    image: assets/images/play_store_512.png
+    icon_background_color: "#ffffff"
+    image_dark: assets/images/ic_launcher.png
+    icon_background_color_dark: "#ffffff"
+
+  web: false
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
@@ -67,8 +101,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+    - assets/images/btBackGroundImageAsset.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -93,6 +127,6 @@ flutter:
   #       - asset: fonts/TrajanPro.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
-  #
+  #assets/images/ic_launcher.png
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

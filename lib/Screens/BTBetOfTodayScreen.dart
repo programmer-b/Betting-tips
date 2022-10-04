@@ -6,6 +6,8 @@ import 'package:bettingtips/Components/BTLoadingComponent.dart';
 import 'package:bettingtips/Components/BTTopMenuLayout.dart';
 import 'package:bettingtips/Model/BTAllTipsModel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_share/flutter_share.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:nb_utils/nb_utils.dart' hide log;
 import 'package:provider/provider.dart';
 
@@ -13,6 +15,7 @@ import '../Components/BTBackgroundComponent.dart';
 import '../Components/BTDrawerComponent.dart';
 import 'package:bettingtips/Commons/BTEnums.dart';
 import '../Provider/BTProvider.dart';
+import '../Utils/BTAdhelper.dart';
 
 class BTBetOfTodayScreen extends StatefulWidget {
   const BTBetOfTodayScreen({Key? key}) : super(key: key);
@@ -116,7 +119,7 @@ class _BTBetOfTodayScreenState extends State<BTBetOfTodayScreen> {
         DataCell(SizedBox(
           width: 70,
           child: Text(
-            dates[table]?.lastChars(10).replaceAll(".", "/")??"null",
+            dates[table]?.lastChars(10).replaceAll(".", "/") ?? "null",
             style: primaryTextStyle(size: 12, color: btPrimaryTextColor),
           ),
         )),
@@ -128,13 +131,13 @@ class _BTBetOfTodayScreenState extends State<BTBetOfTodayScreen> {
           ),
         )),
         DataCell(Text(
-          tips[table][row]??"null",
+          tips[table][row] ?? "null",
           style: primaryTextStyle(size: 12, color: btPrimaryTextColor),
         ).center()),
         DataCell(SizedBox(
           width: 30,
           child: Text(
-           odds[table][row]??"null",
+            odds[table][row] ?? "null",
             style: primaryTextStyle(size: 12, color: btPrimaryTextColor),
           ),
         )),
@@ -144,19 +147,40 @@ class _BTBetOfTodayScreenState extends State<BTBetOfTodayScreen> {
           height: 34,
           width: 60,
           child: Text(
-            results[table][row]??"null",
+            results[table][row] ?? "null",
             style: primaryTextStyle(size: 12, color: btPrimaryTextColor),
           ).center(),
         ))
       ];
+  @override
+  void initState() {
+    super.initState();
+    createBannerAd();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Consumer<BTProvider>(
       builder: (context, provider, child) {
         return Scaffold(
+          bottomNavigationBar: Container(
+                  color: Colors.transparent,
+                  margin: const EdgeInsets.only(bottom: 12),
+                  height: 52,
+                  child: AdWidget(ad: bannerAd!))
+              .visible(bannerAd != null && provider.btLoadSuccess),
           appBar: AppBar(
             title: Text(provider.currentScreenTitle),
+            actions: [
+              IconButton(
+                  icon: Icon(Icons.share),
+                  onPressed: () async {
+                    await FlutterShare.share(
+                        title: 'Share betting tips app',
+                        text:
+                            "https://play.google.com/store/apps/details?id=com.dantech.bettingtips");
+                  })
+            ],
           ),
           body: BTLoadingComponent(
               child: BTBackgroundComponent(
@@ -213,20 +237,21 @@ class _BTBetOfTodayScreenState extends State<BTBetOfTodayScreen> {
                                 style: boldTextStyle(color: btHeaderDateColor))
                           ])).paddingSymmetric(horizontal: 20, vertical: 10),
                           DataTable(
-                              columnSpacing: 25,
-                              dataRowHeight: 34,
-                              headingRowHeight: 34,
-                              headingRowColor: MaterialStateColor.resolveWith(
-                                  (states) => btBackgroundBlueColor),
-                              border: TableBorder.all(
-                                color: Colors.grey,
-                              ),
-                              columns: columns(table),
-                              rows: List<DataRow>.generate(
-                                  time[table].length,
-                                  (index) => DataRow(
-                                      cells: cells(table,
-                                          index)))).paddingAll(8),
+                                  columnSpacing: 25,
+                                  dataRowHeight: 34,
+                                  headingRowHeight: 34,
+                                  headingRowColor:
+                                      MaterialStateColor.resolveWith(
+                                          (states) => btBackgroundBlueColor),
+                                  border: TableBorder.all(
+                                    color: Colors.grey,
+                                  ),
+                                  columns: columns(table),
+                                  rows: List<DataRow>.generate(
+                                      time[table].length,
+                                      (index) =>
+                                          DataRow(cells: cells(table, index))))
+                              .paddingAll(8),
                         ],
                       )
                   ],

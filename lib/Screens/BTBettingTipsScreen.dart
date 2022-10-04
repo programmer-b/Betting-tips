@@ -6,10 +6,13 @@ import 'package:bettingtips/Components/BTDrawerComponent.dart';
 import 'package:bettingtips/Components/BTLoadingComponent.dart';
 import 'package:bettingtips/Components/BTTopMenuLayout.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_share/flutter_share.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
 import '../Provider/BTProvider.dart';
+import '../Utils/BTAdhelper.dart';
 
 class BTBettingTipsScreen extends StatefulWidget {
   const BTBettingTipsScreen({Key? key}) : super(key: key);
@@ -20,12 +23,34 @@ class BTBettingTipsScreen extends StatefulWidget {
 
 class _BTBettingTipsScreenState extends State<BTBettingTipsScreen> {
   @override
+  void initState() {
+    super.initState();
+    createBannerAd();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Consumer<BTProvider>(
       builder: (context, provider, child) {
         return Scaffold(
+          bottomNavigationBar: Container(
+                  color: Colors.transparent,
+                  margin: const EdgeInsets.only(bottom: 12),
+                  height: 52,
+                  child: AdWidget(ad: bannerAd!))
+              .visible(bannerAd != null && provider.btLoadSuccess),
           appBar: AppBar(
             title: Text(provider.currentScreenTitle),
+            actions: [
+              IconButton(
+                  icon: Icon(Icons.share),
+                  onPressed: () async {
+                    await FlutterShare.share(
+                        title: 'Share betting tips app',
+                        text:
+                            "https://play.google.com/store/apps/details?id=com.dantech.bettingtips");
+                  })
+            ],
           ),
           body: BTLoadingComponent(
               child: BTBackgroundComponent(
@@ -47,7 +72,10 @@ class _BTBettingTipsScreenState extends State<BTBettingTipsScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.copyright_outlined, color: btTableHeaderTextColor,),
+                        const Icon(
+                          Icons.copyright_outlined,
+                          color: btTableHeaderTextColor,
+                        ),
                         5.width,
                         Text(
                           'Dantech',
